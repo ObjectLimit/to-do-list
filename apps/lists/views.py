@@ -2,7 +2,7 @@ import logging
 
 from django.contrib.auth import get_user_model
 from django.http import Http404
-from rest_framework import generics, status
+from rest_framework import generics, permissions, status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 
@@ -15,6 +15,7 @@ User = get_user_model()
 
 class MyListsAPIView(generics.ListAPIView):
     serializer_class = ListSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         return List.objects.filter(author=self.request.user).order_by("-created_at")
@@ -23,6 +24,7 @@ class MyListsAPIView(generics.ListAPIView):
 class ListCreateAPIView(generics.CreateAPIView):
     queryset = List.objects.all()
     serializer_class = ListSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
         user = self.request.user
@@ -33,6 +35,7 @@ class ListDeleteAPIView(generics.DestroyAPIView):
     queryset = List.objects.all()
     lookup_field = "slug"
     serializer_class = ListSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self) -> List:
         try:
@@ -56,6 +59,7 @@ class ListUpdateAPIView(generics.UpdateAPIView):
     queryset = List.objects.all()
     lookup_field = "slug"
     serializer_class = ListSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self) -> List:
         try:

@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from rest_framework import generics, status
+from rest_framework import generics, permissions, status
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -14,6 +14,7 @@ User = get_user_model()
 
 class ProfileDetailAPIView(generics.RetrieveAPIView):
     serializer_class = ProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self) -> Profile:
         try:
@@ -23,6 +24,8 @@ class ProfileDetailAPIView(generics.RetrieveAPIView):
 
 
 class AvatarUploadView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
     def patch(self, request, *args, **kwargs):
         return self.upload_avatar(request, *args, **kwargs)
 

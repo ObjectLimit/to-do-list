@@ -1,7 +1,7 @@
 import logging
 
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, status
+from rest_framework import generics, permissions, status
 from rest_framework.exceptions import NotFound, PermissionDenied
 from rest_framework.response import Response
 
@@ -14,6 +14,7 @@ logger = logging.getLogger(__name__)
 
 class TaskListAPIView(generics.ListAPIView):
     serializer_class = TaskSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         list_slug = self.kwargs.get("slug")
@@ -26,6 +27,7 @@ class TaskListAPIView(generics.ListAPIView):
 class TaskCreateAPIView(generics.CreateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
         list_slug = self.kwargs.get("slug")
@@ -42,6 +44,7 @@ class TaskCreateAPIView(generics.CreateAPIView):
 class TaskDeleteAPIView(generics.DestroyAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self) -> Task:
         list_slug = self.kwargs.get("slug")
@@ -67,6 +70,7 @@ class TaskDeleteAPIView(generics.DestroyAPIView):
 class TaskUpdateAPIView(generics.UpdateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self) -> Task:
         list_slug = self.kwargs.get("slug")
@@ -93,6 +97,7 @@ class TaskUpdateAPIView(generics.UpdateAPIView):
 
 class TaskUpdateStatusAPIView(generics.UpdateAPIView):
     serializer_class = TaskStatusSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self) -> Task:
         list_slug = self.kwargs.get("slug")
