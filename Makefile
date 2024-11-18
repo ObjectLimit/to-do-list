@@ -29,7 +29,7 @@ volume:
 	docker volume inspect to-do-list_postgres_data
 
 list-db:
-	docker compose exec postgres-db psql --username=test --dbname=to-do-list
+	docker compose exec postgres psql --username=test --dbname=to-do-list
 
 flake8:
 	docker compose exec api flake8 .
