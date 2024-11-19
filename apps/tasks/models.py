@@ -1,9 +1,10 @@
-from autoslug import AutoSlugField
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
 from apps.common.models import TimeStampedUUIDModel
+from apps.common.utils import generate_slug
 from apps.lists.models import List
 
 User = get_user_model()
@@ -22,7 +23,7 @@ class Task(TimeStampedUUIDModel):
         List, verbose_name=_("List"), on_delete=models.CASCADE, related_name="tasks"
     )
     title = models.CharField(verbose_name=_("Title"), max_length=250)
-    slug = AutoSlugField(populate_from="title", always_update=True, unique=True)
+    slug = models.SlugField(unique=True)
     body = models.TextField(verbose_name=_("Post"), blank=True)
     done = models.BooleanField(default=False, verbose_name=_("Done"))
     priority = models.TextField(
@@ -35,3 +36,7 @@ class Task(TimeStampedUUIDModel):
     class Meta:
         verbose_name = _("Task")
         verbose_name_plural = _("Tasks")
+
+    def save(self, *args, **kwargs):
+        self.slug = generate_slug(self, slugify(self.title))
+        super().save(*args, **kwargs)

@@ -21,7 +21,7 @@ class TaskSerializer(serializers.ModelSerializer):
             "author_username",
             "created_at",
         ]
-        read_only_fields = ["id", "created_at", "done"]
+        read_only_fields = ["id", "created_at", "slug", "done"]
 
     def get_created_at(self, obj):
         now = obj.created_at
