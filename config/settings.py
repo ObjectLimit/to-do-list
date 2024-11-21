@@ -41,6 +41,7 @@ THIRD_PARTY_APPS = [
     "rest_framework_simplejwt",
     "djcelery_email",
     "cloudinary",
+    "drf_yasg",
 ]
 LOCAL_APPS = [
     "apps.users",
