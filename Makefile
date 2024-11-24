@@ -1,3 +1,9 @@
+ifneq (,$(wildcard ./.env))
+    include .env
+    export
+    ENV_FILE_PARAM = --env-file .env
+endif
+
 build:
 	docker compose up --build -d --remove-orphans
 
@@ -29,7 +35,7 @@ volume:
 	docker volume inspect to-do-list_postgres_data
 
 list-db:
-	docker compose exec postgres psql --username=test --dbname=to-do-list
+	docker compose exec postgres psql --username=${POSTGRES_USER} --dbname=${POSTGRES_DB}
 
 flake8:
 	docker compose exec api flake8 .
